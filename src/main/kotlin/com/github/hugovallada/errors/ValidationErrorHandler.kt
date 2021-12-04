@@ -7,18 +7,18 @@ import javax.validation.ConstraintViolation
 import javax.validation.ConstraintViolationException
 import javax.ws.rs.core.Response
 
-class ErrorHandler {
+class ValidationErrorHandler {
 
     @ResponseStatus(400)
     @ServerExceptionMapper(value = [ConstraintViolationException::class])
-    fun handleConstraintViolationError(ex: ConstraintViolationException): RestResponse<ResponseError> {
+    fun handleConstraintViolationError(ex: ConstraintViolationException): RestResponse<ValidationResponseError> {
         val errors = mutableListOf<Map<String, String>>()
 
         ex.constraintViolations.forEach {
             errors.add(buildErrorMessage(it))
         }
 
-        return RestResponse.status(Response.Status.BAD_REQUEST, ResponseError("Erros de validação! Corrija antes de continuar.", errors))
+        return RestResponse.status(Response.Status.BAD_REQUEST, ValidationResponseError("Erros de validação! Corrija antes de continuar.", errors))
     }
 
     private fun buildErrorMessage(constraint: ConstraintViolation<*>): Map<String, String> {
