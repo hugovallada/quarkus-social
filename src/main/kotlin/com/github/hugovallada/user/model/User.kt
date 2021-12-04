@@ -8,9 +8,9 @@ import javax.persistence.*
 @Table(name = "USERS")
 class User(
     @Column(nullable = false)
-    val name: String,
+    var name: String,
     @Column(nullable = false)
-    val age: Int
+    var age: Int
 ) : PanacheEntity() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

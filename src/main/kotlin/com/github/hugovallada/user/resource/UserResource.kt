@@ -24,4 +24,27 @@ class UserResource {
     fun listAllUsers() : Response {
         return Response.ok(User.listAll()).build()
     }
+
+    @PUT
+    @Path("{userId}")
+    @Transactional
+    fun updateUser(@PathParam("userId") userId: Long, userRequest: CreateUserRequest) : Response {
+        User.findById(userId)?.apply {
+            age = userRequest.age
+            name = userRequest.name
+            persist()
+            return Response.accepted().build()
+        }
+
+        return Response.status(404, "User not found").build()
+    }
+
+    @DELETE
+    @Path("{userId}")
+    @Transactional
+    fun deleteUser(@PathParam("userId") userId: Long) : Response {
+        User.findById(userId)?.apply { User.deleteById(userId) }
+            ?: return Response.status(404, "User Not Found!").build()
+        return Response.noContent().build()
+    }
 }
