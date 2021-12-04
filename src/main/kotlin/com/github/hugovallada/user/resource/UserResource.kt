@@ -16,21 +16,21 @@ class UserResource(private val userRepository: UserRepository) {
 
     @POST
     @Transactional
-    fun createUser(@Valid userRequest: CreateUserRequest) : Response {
+    fun createUser(@Valid userRequest: CreateUserRequest): Response {
         val user = User(name = userRequest.name, age = userRequest.age)
         userRepository.persist(user)
         return Response.status(201).build()
     }
 
     @GET
-    fun listAllUsers() : Response {
+    fun listAllUsers(): Response {
         return Response.ok(userRepository.listAll()).build()
     }
 
     @PUT
     @Path("{userId}")
     @Transactional
-    fun updateUser(@PathParam("userId") userId: Long, @Valid userRequest: CreateUserRequest) : Response {
+    fun updateUser(@PathParam("userId") userId: Long, @Valid userRequest: CreateUserRequest): Response {
         userRepository.findById(userId)?.apply {
             age = userRequest.age
             name = userRequest.name
@@ -43,7 +43,7 @@ class UserResource(private val userRepository: UserRepository) {
     @DELETE
     @Path("{userId}")
     @Transactional
-    fun deleteUser(@PathParam("userId") userId: Long) : Response {
+    fun deleteUser(@PathParam("userId") userId: Long): Response {
         userRepository.findById(userId)?.apply {
             userRepository.delete(this)
             return Response.noContent().build()

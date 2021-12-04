@@ -1,7 +1,5 @@
 package com.github.hugovallada.user.model
 
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanion
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntity
 import javax.persistence.*
 
 @Entity
@@ -14,7 +12,7 @@ class User(
     var name: String,
     @Column(nullable = false)
     var age: Int
-){
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
