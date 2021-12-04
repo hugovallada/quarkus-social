@@ -3,6 +3,7 @@ package com.github.hugovallada.user.resource
 import com.github.hugovallada.user.dto.CreateUserRequest
 import com.github.hugovallada.user.model.User
 import com.github.hugovallada.user.repository.UserRepository
+import org.jboss.resteasy.reactive.ResponseStatus
 import javax.transaction.Transactional
 import javax.validation.Valid
 import javax.ws.rs.*
@@ -23,8 +24,9 @@ class UserResource(private val userRepository: UserRepository) {
     }
 
     @GET
-    fun listAllUsers(): Response {
-        return Response.ok(userRepository.listAll()).build()
+    @ResponseStatus(202)
+    fun listAllUsers(): List<User> {
+        return userRepository.listAll()
     }
 
     @PUT
