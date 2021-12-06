@@ -24,14 +24,13 @@ class PostResource(
 
     @POST
     @Transactional
-    fun savePost(@PathParam("userId") userId: Long, request: CreatePostRequest) : RestResponse<Any> {
+    fun savePost(@PathParam("userId") userId: Long, request: CreatePostRequest) : RestResponse<Post> {
         userRepository.findById(userId)?.run {
             log.info(request)
             val post = Post(text = request.text, user = this)
             postRepository.persist(post)
             return RestResponse.status(Response.Status.CREATED, post)
-        }
-        return RestResponse.status(404, "Usuário não encontrado")
+        } ?: throw NotFoundException("Usuário com id $userId não encontrado")
     }
 
     @GET
