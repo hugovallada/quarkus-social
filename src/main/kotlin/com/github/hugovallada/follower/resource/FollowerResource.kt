@@ -50,5 +50,25 @@ class FollowerResource(
         } ?: throw NotFoundException("Usuário com id $userId não encontrado")
     }
 
+    @DELETE
+    @Path("{followedId}")
+    @ResponseStatus(202)
+    @Transactional
+    fun stopFollowing(
+        @PathParam("userId") userId: Long,
+        @PathParam("followedId") followedId: Long
+    ) {
+        if (userId == followedId) {
+            throw BadRequestException("Invalid id")
+        }
+
+        userRepository.findById(userId)?.let {
+            followed ->
+            userRepository.findById(followedId)?.run {
+                followerRepository.stopFollowing(this, followed)
+            } ?: throw NotFoundException("User with id $followedId not found.")
+        } ?: throw NotFoundException("User with id $userId not found")
+    }
+
 
 }
