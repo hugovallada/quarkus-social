@@ -39,10 +39,13 @@ class PostResource(
     @GET
     @Path("/{followerId}")
     fun getPosts(@PathParam("userId") userId: Long, @PathParam("followerId") followerId: Long) :RestResponse<List<PostResponse>>{
-        if (!followerRepository.isAlreadyFollowed(followerId, userId)) {
-            throw BadRequestException("You must follow the user to see this post!")
-        }
         userRepository.findById(userId)?.run {
+            userRepository.findById(followerId) ?: throw NotFoundException("Usuário com id $followerId não encontrado")
+
+            if (userId != followerId && !followerRepository.isAlreadyFollowed(followerId, userId)) {
+                throw BadRequestException("You must follow the user to see this post!")
+            }
+
             return RestResponse.ok(postRepository.getPostsFromUser(this))
         } ?: throw NotFoundException("Usuário com id $userId não encontrado")
     }
