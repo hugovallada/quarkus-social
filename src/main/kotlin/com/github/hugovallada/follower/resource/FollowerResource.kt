@@ -3,6 +3,7 @@ package com.github.hugovallada.follower.resource
 import com.github.hugovallada.errors.customErrors.AlreadyFollowingException
 import com.github.hugovallada.errors.customErrors.NotFoundException
 import com.github.hugovallada.follower.dto.FollowerRequest
+import com.github.hugovallada.follower.dto.FollowersResponse
 import com.github.hugovallada.follower.model.Follower
 import com.github.hugovallada.follower.repository.FollowerRepository
 import com.github.hugovallada.user.repository.UserRepository
@@ -21,10 +22,10 @@ class FollowerResource(
 ) {
 
     @GET
-    fun getAllFollowers(@PathParam("userId") userId: Long): RestResponse<List<Follower>> {
+    fun getAllFollowers(@PathParam("userId") userId: Long): RestResponse<FollowersResponse> {
         userRepository.findById(userId)?.run {
             followerRepository.list("user", this).let {
-                return RestResponse.ok(it)
+                return RestResponse.ok(FollowersResponse(it.toSet(), it.count()))
             }
         } ?: throw NotFoundException("Usuário com id $userId não encontrado")
     }
