@@ -18,7 +18,10 @@ class ValidationErrorHandler {
             errors.add(buildErrorMessage(it))
         }
 
-        return RestResponse.status(Response.Status.BAD_REQUEST, ValidationResponseError("Erros de validação! Corrija antes de continuar.", errors))
+        return RestResponse.status(
+            Response.Status.BAD_REQUEST,
+            ValidationResponseError("Erros de validação! Corrija antes de continuar.", errors)
+        )
     }
 
     private fun buildErrorMessage(constraint: ConstraintViolation<*>): Map<String, String> {

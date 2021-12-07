@@ -44,8 +44,8 @@ class FollowerResource(
                     throw AlreadyFollowingException("User ${this.name} is already following ${toBeFollowed.name}")
                 }
 
-                    Follower(user = toBeFollowed, follower = this).apply {
-                  followerRepository.persist(this)
+                Follower(user = toBeFollowed, follower = this).apply {
+                    followerRepository.persist(this)
                 }
             } ?: throw NotFoundException("Usuário com id $userId não encontrado")
         } ?: throw NotFoundException("Usuário com id $userId não encontrado")
@@ -63,8 +63,7 @@ class FollowerResource(
             throw BadRequestException("Invalid id")
         }
 
-        userRepository.findById(userId)?.let {
-            followed ->
+        userRepository.findById(userId)?.let { followed ->
             userRepository.findById(followedId)?.run {
                 followerRepository.stopFollowing(this, followed)
             } ?: throw NotFoundException("User with id $followedId not found.")

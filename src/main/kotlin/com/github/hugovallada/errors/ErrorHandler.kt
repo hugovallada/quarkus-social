@@ -17,7 +17,7 @@ class ErrorHandler {
     }
 
     @ServerExceptionMapper(value = [AlreadyFollowingException::class])
-    fun handleAlreadyFollowingException(ex: AlreadyFollowingException) : RestResponse<ErrorResponse> {
+    fun handleAlreadyFollowingException(ex: AlreadyFollowingException): RestResponse<ErrorResponse> {
         return RestResponse.status(
             RestResponse.Status.CONFLICT,
             ErrorResponse("409", ex.message ?: "User is already following")
@@ -25,7 +25,7 @@ class ErrorHandler {
     }
 
     @ServerExceptionMapper(value = [BadRequestException::class])
-    fun handleBadRequestException(ex: BadRequestException) : RestResponse<ErrorResponse> {
+    fun handleBadRequestException(ex: BadRequestException): RestResponse<ErrorResponse> {
         return RestResponse.status(
             RestResponse.Status.BAD_REQUEST,
             ErrorResponse("400", ex.message ?: "Bad Request")
