@@ -1,8 +1,12 @@
 package com.github.hugovallada.user.resource
 
+import com.github.hugovallada.errors.ErrorResponse
 import com.github.hugovallada.user.dto.CreateUserRequest
+import io.kotest.assertions.print.print
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldHave
+import io.kotest.matchers.string.shouldContainIgnoringCase
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
@@ -37,10 +41,13 @@ class UserResourceTest {
             .post("/users")
             .then()
             .statusCode(400)
+            .and()
             .extract()
-            .response().run {
-                statusCode shouldBe 400
-                body.shouldNotBeNull()
+            .asPrettyString().run {
+                println(this)
+                this shouldContainIgnoringCase "NotBlank"
+                this shouldContainIgnoringCase "Size"
+                this shouldContainIgnoringCase "Positive"
             }
     }
 
